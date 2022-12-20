@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  db-server:
+    image: postgres:13-alpine
+    ports:
+      - "5434:5432"
+    env_file:
+      - ./.env.db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: "exit 0" #further research on this
+  keycloak-server:
+    image: 022024849961.dkr.ecr.us-east-2.amazonaws.com/keycloak-auth-server:${IMAGE_VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile.kc
+      target: production
+    env_file:
+      - ./.env.kc
+    ports:
+      - "8080:8080"
+    depends_on:
+      db-server:
+        condition: service_healthy
+volumes:
+  postgres_data:
