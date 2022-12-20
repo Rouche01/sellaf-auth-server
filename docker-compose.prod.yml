@@ -13,11 +13,9 @@ services:
   keycloak-server:
     image: 022024849961.dkr.ecr.us-east-2.amazonaws.com/keycloak-auth-server:${IMAGE_VERSION}
     build:
-      context: .
-      dockerfile: Dockerfile.kc
       target: production
     env_file:
-      - ./.env.kc
+      - ./.env
     ports:
       - "8080:8080"
     depends_on:

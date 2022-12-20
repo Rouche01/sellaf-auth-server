@@ -1,6 +1,7 @@
 .env.debug
 .env.db
 .env.kc
+.env
 
 # IDE - VSCode
 .vscode/*
