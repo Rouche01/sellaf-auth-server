@@ -12,8 +12,6 @@ services:
       test: "exit 0" #further research on this
   keycloak-server:
     image: 022024849961.dkr.ecr.us-east-2.amazonaws.com/keycloak-auth-server:${IMAGE_VERSION}
-    build:
-      target: production
     env_file:
       - ./.env
     ports:

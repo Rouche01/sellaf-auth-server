@@ -75,7 +75,7 @@ jobs:
           envkey_KC_HTTP_ENABLED: ${{ secrets.KC_HTTP_ENABLED }}
           envkey_KC_HOSTNAME: ${{ secrets.KC_HOSTNAME }}
           envkey_IMAGE_VERSION: ${{ github.sha }}
-          file_name: .env.kc
+          file_name: .env
           fail_on_empty: false
 
       - name: Deploy to my EC2 instance
