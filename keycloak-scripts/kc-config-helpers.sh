@@ -4,14 +4,22 @@ set -e
 set +u
 set -o pipefail
 
+# get the object id for a given realm
+function getRealm() {
+    #arguments
+    REALM_NAME=$1
+    #
+    REALM_ID=$($KCADM get realms/${REALM_NAME} | jq '. | .id')
+    echo $(sed -e 's/"//g' <<< $REALM_ID)
+}
+
 # the new realm is also set as enabled
 function createRealm() {
     # arguments
     REALM_NAME=$1
     #
-    $KCADM create realms -s realm="${REALM_NAME}" -s enabled=true
-    EXISTING_REALM=$($KCADM get realms/$REALM_NAME)
-    if [ "$EXISTING_REALM" == "" ]; then
+    ID=$(getRealm $REALM_NAME)
+    if [ "$ID" == "" ]; then
         $KCADM create realms -s realm="${REALM_NAME}" -s enabled=true
     fi
 }
@@ -27,7 +35,7 @@ function createClient() {
     ID=$(getClient $REALM_NAME $CLIENT_ID)
     if [[ "$ID" == "" ]]; then
         $KCADM create clients -r $REALM_NAME -s clientId=$CLIENT_ID -s name=$CLIENT_NAME -s enabled=true \
-        -s "clientAuthenticatorType=client-secret" -s secret=$CLIENT_SECRET \
+        -s "clientAuthenticatorType=client-secret" -s secret=$CLIENT_SECRET -s directAccessGrantsEnabled=true \
         -s serviceAccountsEnabled=true -s authorizationServicesEnabled=true
     fi
     echo $(getClient $REALM_NAME $CLIENT_ID)
